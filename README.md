@@ -33,7 +33,6 @@ $ httpstat https://example.com/
 
 Bug reports are most welcome, but with the exception of #5, this project is closed.
 
-Pull requests must include a `fixes #NNN` or `updates #NNN` comment. 
+Pull requests must include a `fixes #NNN` or `updates #NNN` comment.
 
 Please discuss your design on the accompanying issue before submitting a pull request. If there is no suitable issue, please open one to discuss the feature before slinging code. Thank you.
-# httpstat
