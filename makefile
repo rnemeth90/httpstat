@@ -1,18 +1,22 @@
 TARGETS = linux-386 linux-amd64 linux-arm linux-arm64 darwin-amd64 windows-386 windows-amd64
-COMMAND_NAME = httpstat
+COMMAND_NAME = csv2json
 PACKAGE_NAME = github.com/rnemeth90/$(COMMAND_NAME)
 LDFLAGS = -ldflags=-X=main.version=$(VERSION)
 OBJECTS = $(patsubst $(COMMAND_NAME)-windows-amd64%,$(COMMAND_NAME)-windows-amd64%.exe, $(patsubst $(COMMAND_NAME)-windows-386%,$(COMMAND_NAME)-windows-386%.exe, $(patsubst %,$(COMMAND_NAME)-%-v$(VERSION), $(TARGETS))))
 
-export VERSION = 1
-
-release: check-env $(OBJECTS) ## Build release binaries (requires VERSION)
+release: format createbuilddir check-env $(OBJECTS) ## Build release binaries (requires VERSION)
 
 clean: check-env ## Remove release binaries
-	rm $(OBJECTS)
+	rm -rf build
+
+format:
+	gofmt -w -s *.go
+
+createbuilddir:
+	mkdir -p build/bin
 
 $(OBJECTS): $(wildcard *.go)
-	env GOOS=`echo $@ | cut -d'-' -f2` GOARCH=`echo $@ | cut -d'-' -f3 | cut -d'.' -f 1` go build -o $@ $(LDFLAGS) $(PACKAGE_NAME)
+	env GOOS=`echo $@ | cut -d'-' -f2` GOARCH=`echo $@ | cut -d'-' -f3 | cut -d'.' -f 1` go build -o build/bin/$@ $(LDFLAGS) $(PACKAGE_NAME)
 
 .PHONY: help check-env
 
